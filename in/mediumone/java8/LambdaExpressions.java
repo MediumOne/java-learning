@@ -2,6 +2,7 @@ package in.mediumone.java8;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,6 +43,10 @@ public class LambdaExpressions {
 
         exercise1_2_a();
         exercise1_2_b();
+
+        exercise1_3();
+
+        exercise1_4();
     }
 
     private static void exercise1_1() {
@@ -93,5 +98,47 @@ public class LambdaExpressions {
 
     private static int compareLocal(String first, String second) {
         return Integer.compare(first.length(), second.length());
+    }
+
+    /**
+     * Using the list(FilenameFilter) method of the java.io.File class, write a method
+     * that returns all ﬁles in a given directory with a given extension. Use a lambda
+     * expression, not a FilenameFilter. Which variables from the enclosing scope does
+     * it capture?
+     */
+    private static void exercise1_3() {
+        File directory = new File("/home/sivasubramaniam/Downloads");
+
+        //Using Lambda Expression
+
+        String[] webms = directory.list((dir, name) -> name.contains("webm"));
+
+        System.out.println("WebM Files");
+
+        Arrays.asList(webms).forEach(System.out::println);
+    }
+
+    /**
+     * Given an array of File objects, sort it so that the directories come before the
+     * ﬁles, and within each group, elements are sorted by path name. Use a lambda
+     * expression, not a Comparator.
+     */
+    private static void exercise1_4() {
+        File directory = new File("/home/sivasubramaniam/Downloads");
+
+        File[] filesAndDirs = directory.listFiles();
+
+        Arrays.sort(filesAndDirs, (first, second) -> {
+
+            if(first.isDirectory() && second.isDirectory()) {
+                return first.compareTo(second);
+            } else if (!first.isDirectory() && !second.isDirectory()) {
+                return first.compareTo(second);
+            } else {
+                return (first.isDirectory()) ? -1 : 1;
+            }
+        });
+
+        Arrays.asList(filesAndDirs).forEach(fileName -> System.out.println(fileName.getAbsolutePath()));
     }
 }
